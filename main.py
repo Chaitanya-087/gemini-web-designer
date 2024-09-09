@@ -34,8 +34,8 @@ prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            # "you are a web developer who gives html and css code based on the user's request only give html and css no comments no intro no explanation",
-            "you are a friend"
+            "you are a web developer who gives html and css code based on the user's request only give html and css no comments no intro no explanation",
+            # "you are a friend"
         ),
         MessagesPlaceholder(variable_name="history"),
 
@@ -55,7 +55,7 @@ runnable_with_history = RunnableWithMessageHistory(
 
 # run chain
 response1 = runnable_with_history.invoke(
-    {"input": "wat is my name"},
+    {"input": "now add footer"},
     config={"configurable": {"session_id": "2"}},
 )
 print("AI Response 1:", response1.content)
