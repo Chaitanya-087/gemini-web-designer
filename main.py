@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 API_KEY=os.getenv("GEMINI_API_KEY")
-REDIS_URL = "redis://localhost:6379/0"
+REDIS_URL = "redis://localhost:8080/0"
 
 #session history
 def get_redis_history(session_id: str) -> BaseChatMessageHistory:
@@ -55,7 +55,7 @@ runnable_with_history = RunnableWithMessageHistory(
 
 # run chain
 response1 = runnable_with_history.invoke(
-    {"input": "wat is my name"},
+    {"input": "what is my name?"},
     config={"configurable": {"session_id": "2"}},
 )
 print("AI Response 1:", response1.content)
