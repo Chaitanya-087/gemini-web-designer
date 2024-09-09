@@ -1,12 +1,13 @@
 import os
-import google.generativeai as genai
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
 
-from dotenv import load_dotenv, dotenv_values 
+from dotenv import load_dotenv
 load_dotenv() 
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+API_KEY=os.getenv("GEMINI_API_KEY")
 
-# Create the model
+# create model
 generation_config = {
   "temperature": 2,
   "top_p": 0.95,
@@ -14,32 +15,22 @@ generation_config = {
   "max_output_tokens": 8192,
   "response_mime_type": "application/json",
 }
+model=ChatGoogleGenerativeAI(model="gemini-1.5-flash", generation_config=generation_config,api_key=API_KEY)
 
-model = genai.GenerativeModel(
-  model_name="gemini-1.5-flash",
-  generation_config=generation_config,
-  # safety_settings = Adjust safety settings
-  # See https://ai.google.dev/gemini-api/docs/safety-settings
-  system_instruction="generate html and css code donot give comments",
+# create prompt
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "you are a web developer who gives html and css code based on the user's request only give html and css no comments no intro no explanation",
+        ),
+        ("user", "{input}")
+    ]
 )
 
-chat_session = model.start_chat(
-  history=[
-    {
-      "role": "user",
-      "parts": [
-        "create home page with navbar and banner",
-      ],
-    },
-    {
-      "role": "model",
-      "parts": [
-        "```json\n{\"html\": \"<!DOCTYPE html>\\n<html lang=\\\"en\\\">\\n<head>\\n    <meta charset=\\\"UTF-8\\\">\\n    <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\">\\n    <title>Home Page</title>\\n    <style>\\n        body {\\n            margin: 0;\\n            font-family: sans-serif;\\n        }\\n        \\n        .navbar {\\n            background-color: #333;\\n            color: #fff;\\n            padding: 10px 0;\\n            text-align: center;\\n        }\\n        \\n        .navbar a {\\n            color: #fff;\\n            text-decoration: none;\\n            padding: 10px 20px;\\n            margin: 0 10px;\\n        }\\n        \\n        .banner {\\n            background-image: url(\\\"banner_image.jpg\\\"); /* Replace with your image path */\\n            background-size: cover;\\n            height: 300px;\\n            display: flex;\\n            justify-content: center;\\n            align-items: center;\\n            color: #fff;\\n            text-align: center;\\n        }\\n        \\n        .banner h1 {\\n            font-size: 3em;\\n            font-weight: bold;\\n        }\\n    </style>\\n</head>\\n<body>\\n    <div class=\\\"navbar\\\">\\n        <a href=\\\"#\\\">Home</a>\\n        <a href=\\\"#\\\">About</a>\\n        <a href=\\\"#\\\">Contact</a>\\n    </div>\\n    \\n    <div class=\\\"banner\\\">\\n        <h1>Welcome to Our Website</h1>\\n    </div>\\n</body>\\n</html>\", \"css\": \"body {\\n    margin: 0;\\n    font-family: sans-serif;\\n}\\n\\n.navbar {\\n    background-color: #333;\\n    color: #fff;\\n    padding: 10px 0;\\n    text-align: center;\\n}\\n\\n.navbar a {\\n    color: #fff;\\n    text-decoration: none;\\n    padding: 10px 20px;\\n    margin: 0 10px;\\n}\\n\\n.banner {\\n    background-image: url(\\\"banner_image.jpg\\\"); /* Replace with your image path */\\n    background-size: cover;\\n    height: 300px;\\n    display: flex;\\n    justify-content: center;\\n    align-items: center;\\n    color: #fff;\\n    text-align: center;\\n}\\n\\n.banner h1 {\\n    font-size: 3em;\\n    font-weight: bold;\\n}\"}\n\n```",
-      ],
-    },
-  ]
-)
+# create chain
+chain = prompt | model
 
-response = chat_session.send_message("create about page with text and image")
-
-print(response.text)
+# run chain
+res = chain.invoke({"input":"create home page with navbar and banner"})
+print(res.content)
