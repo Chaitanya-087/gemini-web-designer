@@ -1,3 +1,5 @@
 python-dotenv
 google-generativeai
 fastapi[standard]
+langchain 
+langchain-google-genai
