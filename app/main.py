@@ -1,3 +1,7 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from .routers import hello
+
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate,  MessagesPlaceholder
@@ -5,12 +9,24 @@ from langchain_core.messages import HumanMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_redis import RedisChatMessageHistory
-
-
-
-
 from dotenv import load_dotenv
 load_dotenv() 
+
+app = FastAPI()
+
+origins=[
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+app.include_router(hello.router)
 
 API_KEY=os.getenv("GEMINI_API_KEY")
 REDIS_URL = "redis://localhost:8080/0"
@@ -54,9 +70,8 @@ runnable_with_history = RunnableWithMessageHistory(
 )
 
 # run chain
-response1 = runnable_with_history.invoke(
-    {"input": "add navbar to this"},
-    config={"configurable": {"session_id": "2"}},
-)
-print("AI Response 1:", response1.content)
-
+# response1 = runnable_with_history.invoke(
+#     {"input": "add navbar to this"},
+#     config={"configurable": {"session_id": "2"}},
+# )
+# print("AI Response 1:", response1.content)
