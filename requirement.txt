@@ -3,3 +3,5 @@ google-generativeai
 fastapi[standard]
 langchain 
 langchain-google-genai
+redis
+langchain-community
