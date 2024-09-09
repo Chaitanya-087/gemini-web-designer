@@ -55,7 +55,7 @@ runnable_with_history = RunnableWithMessageHistory(
 
 # run chain
 response1 = runnable_with_history.invoke(
-    {"input": "now add footer"},
+    {"input": "add navbar to this"},
     config={"configurable": {"session_id": "2"}},
 )
 print("AI Response 1:", response1.content)
