@@ -1,0 +1,21 @@
+name: gemini_app
+services:
+  api:
+    build: .
+    command: sh -c "uvicorn ./app/app.main:app --port 8080 --host 0.0.0.0 --reload"
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis-stack
+    
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - "8009:6379"   
+      - "8001:8001"
+    restart: unless-stopped
