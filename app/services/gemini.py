@@ -50,8 +50,9 @@ runnable_with_history = RunnableWithMessageHistory(
 )
 
 # run chain
-response1 = runnable_with_history.invoke(
-    {"input": "add footer"},
-    config={"configurable": {"session_id": "2"}},
-)
-print("AI Response 1:", response1.content)
+def runResponse(prompt):
+    response1 = runnable_with_history.invoke(
+        {"input": prompt},
+        config={"configurable": {"session_id": "2"}},
+    )
+    return("AI Response 1:", response1.content)
