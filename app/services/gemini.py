@@ -6,7 +6,8 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_redis import RedisChatMessageHistory
 from langchain_core.output_parsers import PydanticOutputParser
 from dotenv import load_dotenv
-from ..schemas.ai_response import AIResponse  # Ensure this schema is properly defined
+from ..schemas.ai_response import AIResponse
+from ..schemas.message import Message
 
 load_dotenv()
 
@@ -17,7 +18,7 @@ def test():
     pass
 
 # Session history
-def get_redis_history(session_id: str) -> BaseChatMessageHistory:
+def get_redis_history(session_id: str):
     return RedisChatMessageHistory(session_id, redis_url=REDIS_URL)
 
 # Create model
@@ -56,10 +57,10 @@ runnable_with_history = RunnableWithMessageHistory(
 )
 
 # Run chain and parse the response explicitly
-async def runResponse(user_prompt: str) -> AIResponse:
+async def runResponse(user_prompt: Message) -> AIResponse:
     # Run the model chain with input and session ID
     response1 = runnable_with_history.invoke(
-        {"input": user_prompt},
+        {"input": user_prompt.content},
         config={"configurable": {"session_id": "2"}},
     )
     
