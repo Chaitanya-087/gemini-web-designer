@@ -2,7 +2,7 @@ name: gemini_app
 services:
   api:
     build: .
-    command: sh -c "uvicorn app.main:app --port 8080 --host 0.0.0.0 --reload"
+    command: python serve.py
     ports:
       - 8080:8080
     env_file:
@@ -18,4 +18,8 @@ services:
     ports:
       - "8009:6379"   
       - "8001:8001"
+    volumes:
+        - redis_data:/data
     restart: unless-stopped
+volumes:
+    redis_data:
