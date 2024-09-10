@@ -2,7 +2,7 @@ name: gemini_app
 services:
   api:
     build: .
-    command: sh -c "uvicorn ./app/app.main:app --port 8080 --host 0.0.0.0 --reload"
+    command: sh -c "uvicorn app.main:app --port 8080 --host 0.0.0.0 --reload"
     ports:
       - 8080:8080
     env_file:
