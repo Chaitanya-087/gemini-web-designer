@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import hello
+from .routers import llm_router
 
 app = FastAPI()
 
@@ -17,3 +18,4 @@ app.add_middleware(
 )
 
 app.include_router(hello.router)
+app.include_router(llm_router.router)

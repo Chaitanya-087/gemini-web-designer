@@ -49,8 +49,11 @@ runnable_with_history = RunnableWithMessageHistory(
     history_messages_key="history",
 )
 
+async def test(msg):
+    return msg
+
 # run chain
-def runResponse(prompt):
+async def runResponse(prompt):
     response1 = runnable_with_history.invoke(
         {"input": prompt},
         config={"configurable": {"session_id": "2"}},

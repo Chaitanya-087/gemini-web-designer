@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from ..schemas.message import Message
-from ..services.gemini import runResponse
+from ..services.gemini import runResponse, test
 
 router = APIRouter()
 
-@router.post("/sendPrompt/")
+@router.post("/sendPrompt")
 async def sendPrompt(prompt: Message):
-    return runResponse(prompt)
+    return  await runResponse(prompt)
