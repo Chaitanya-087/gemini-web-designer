@@ -4,7 +4,10 @@ from langchain_core.prompts import ChatPromptTemplate,  MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_redis import RedisChatMessageHistory
+from langchain_core.output_parsers import JsonOutputParser
 from dotenv import load_dotenv
+from ..schemas.ai_response import AIResponse
+
 
 load_dotenv() 
 
@@ -25,6 +28,10 @@ generation_config = {
 }
 model=ChatGoogleGenerativeAI(model="gemini-1.5-flash", generation_config=generation_config,api_key=API_KEY)
 
+#parser
+parser = JsonOutputParser(pydantic_object=AIResponse)
+
+
 # create prompt
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -40,7 +47,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # create chain
-chain = prompt | model
+chain = prompt | model | parser
 
 runnable_with_history = RunnableWithMessageHistory(
     chain,
@@ -54,8 +61,10 @@ async def test(msg):
 
 # run chain
 async def runResponse(prompt):
-    response1 = runnable_with_history.invoke(
+    response1 = await runnable_with_history.invoke(
         {"input": prompt},
         config={"configurable": {"session_id": "2"}},
     )
-    return("AI Response 1:", response1.content)
+    response = response1.content
+    print(response)
+    return('mg')
