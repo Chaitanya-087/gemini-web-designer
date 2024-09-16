@@ -6,16 +6,12 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_redis import RedisChatMessageHistory
 from langchain_core.output_parsers import PydanticOutputParser
 from dotenv import load_dotenv
-from ..schemas.ai_response import AIResponse
-from ..schemas.message import Message
+from ..models import AIResponse, Prompt
 
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
 REDIS_URL = "redis://localhost:8009/0"
-
-def test():
-    pass
 
 # Session history
 def get_redis_history(session_id: str):
@@ -57,10 +53,10 @@ runnable_with_history = RunnableWithMessageHistory(
 )
 
 # Run chain and parse the response explicitly
-async def runResponse(user_prompt: Message) -> AIResponse:
+async def runResponse(user_prompt: Prompt) -> AIResponse:
     # Run the model chain with input and session ID
     response1 = runnable_with_history.invoke(
-        {"input": user_prompt.content},
+        {"input": user_prompt.text},
         config={"configurable": {"session_id": "2"}},
     )
     

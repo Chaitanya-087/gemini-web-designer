@@ -1,12 +1,25 @@
+version: "3.9"
+
 name: gemini_cache
+
 services:
   redis-stack:
     image: redis/redis-stack:latest
     ports:
-      - "8009:6379"   
-      - "8001:8001"
+      - "8009:6379"   # Redis port
+      - "8001:8001"   # RedisInsight
     volumes:
-        - redis_data:/data
+      - redis_data:/data
     restart: unless-stopped
+
+  mongo-stack:
+    image: mongo:latest  # Use the official MongoDB image
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
 volumes:
-    redis_data:
+  redis_data:
+  mongo_data:

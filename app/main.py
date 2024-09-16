@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import hello
-from .routers import llm_router
+from .routers import Hello, Chat
 
 app = FastAPI()
 
@@ -17,5 +16,5 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(hello.router)
-app.include_router(llm_router.router)
+app.include_router(Hello)
+app.include_router(Chat)
