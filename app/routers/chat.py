@@ -56,7 +56,7 @@ async def send_message(chatId: str, message: Prompt):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Chat not found")
     
-    return {"message": "Message added successfully"}
+    return aiResponse
 
 #delete a chat by chat ID
 @router.delete("/{chatId}")
