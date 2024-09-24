@@ -43,7 +43,7 @@ async def send_message(chatId: str, message: Prompt):
     if not ObjectId.is_valid(chatId):
         raise HTTPException(status_code=400, detail="Invalid chat ID")
     
-    aiResponse = await get_ai_response(message)
+    aiResponse = await get_ai_response(message,chatId)
     
     result = chatsCollection.update_one(
         {"_id": ObjectId(chatId)},

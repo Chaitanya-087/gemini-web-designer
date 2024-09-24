@@ -53,11 +53,11 @@ runnable_with_history = RunnableWithMessageHistory(
 )
 
 # Run chain and parse the response explicitly
-async def runResponse(user_prompt: Prompt) -> AIResponse:
+async def runResponse(user_prompt: Prompt,sessionID: str) -> AIResponse:
     # Run the model chain with input and session ID
     response1 = runnable_with_history.invoke(
         {"input": user_prompt.text},
-        config={"configurable": {"session_id": "2"}},
+        config={"configurable": {"session_id": sessionID}},
     )
     
     # Manually parse the model response into the AIResponse Pydantic object
