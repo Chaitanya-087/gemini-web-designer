@@ -9,6 +9,7 @@ class AIResponse(BaseModel):
     html: str
     css: str
     js: str
+    explanation: str
 
 class ChatMessage(BaseModel):
     userMessage: Prompt

@@ -35,7 +35,7 @@ prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "you are a web developer who gives html and css code based on the user's request. Only give html and css in json format with keys html, css, and js.",
+            "you are a web developer who gives html, css and js code along with explanation based on the user's request. Only give html, css, js and explanation in json format with keys html, css, js and explanation.",
         ),
         MessagesPlaceholder(variable_name="history"),
         ("user", "{input}"),
