@@ -7,6 +7,8 @@ from ..schemas.chat import individualChat, allChats
 from ..config.mongo import chatsCollection
 from ..services.gemini import runResponse as get_ai_response
 
+from ..services.chat import getChatsByUserId
+
 router = APIRouter(
     prefix="/chats",
     tags=["chats"],
@@ -32,9 +34,7 @@ async def get_chat(chatId: str):
 # Get all chats by a specific user
 @router.get("/users/{userId}/all", status_code=200)
 async def get_all_chats(userId: str):
-    resp = chatsCollection.find({"user_id": userId})
-    if resp is None:
-        raise HTTPException(status_code=404, detail="No chats found for this user")
+    resp = getChatsByUserId(userId)
     return allChats(resp)
 
 #Post a message in a chat
