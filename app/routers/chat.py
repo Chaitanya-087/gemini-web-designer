@@ -9,6 +9,8 @@ from ..services.gemini import runResponse as get_ai_response
 
 from ..services.chat import getChatsByUserId
 
+from ..util.chat import generateUUID
+
 router = APIRouter(
     prefix="/chats",
     tags=["chats"],
@@ -44,19 +46,19 @@ async def send_message(chatId: str, message: Prompt):
         raise HTTPException(status_code=400, detail="Invalid chat ID")
     
     aiResponse = await get_ai_response(message,chatId)
-    
+    messageId = generateUUID()
+    message = {"id": messageId,"user_message": message.model_dump(),"ai_response": aiResponse.model_dump()}
     result = chatsCollection.update_one(
         {"_id": ObjectId(chatId)},
         {
             "$push": {
-                "messages": {"user_message": message.model_dump(),"ai_response": aiResponse.model_dump()},
+                "messages": message
             }
         }
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Chat not found")
-    
-    return aiResponse
+    return message
 
 #delete a chat by chat ID
 @router.delete("/{chatId}")
