@@ -16,6 +16,14 @@ router = APIRouter(
     tags=["chats"],
 )
 
+#create defualt chat
+@router.post("/default", status_code=200)
+async def default_chat(message: str):
+    aiResponse = await get_ai_response(message,generateUUID())
+    message = {"id": messageId,"user_message": message.model_dump(),"ai_response": aiResponse.model_dump()}
+    return message
+    
+
 # Create a new chat
 @router.post("/users/{userId}", status_code=201)
 async def create_chat(userId: str):
