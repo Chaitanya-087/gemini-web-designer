@@ -1,8 +1,6 @@
 from fastapi import APIRouter
-from ..models import Prompt
 router = APIRouter()
 
-@router.get("/",tags=["greet"])
+@router.get("/",tags=["greet"], status_code=200)
 async def greet():
-    message=Prompt(text="welcome to web designer api...🚀")
-    return message
+    return {"message": "welcome to web designer api...🚀"}
