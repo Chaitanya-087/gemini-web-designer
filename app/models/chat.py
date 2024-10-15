@@ -1,22 +1,30 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Union, Literal
 from datetime import datetime
+from uuid import uuid4
+from typing import List, Optional
+from enum import Enum
 
-class Prompt(BaseModel):
-    text: str
 
-class AIResponse(BaseModel):
-    html: str
-    css: str
-    js: str
-    explanation: str
+class MessageType(str, Enum):
+    ai = "ai"
+    user = "user"
 
-class ChatMessage(BaseModel):
-    userMessage: Prompt
-    aiMessage: AIResponse
+
+class Message(BaseModel):
+    id: str = Field(default_factory=lambda: uuid4().hex)
+    type: MessageType
+    content:str=Field(default="")
     
+class Code(BaseModel):
+    html: str = Field(default="", min_length=0)
+    css: str = Field(default="", min_length=0)
+    js: str = Field(default="", min_length=0)
+
 class Chat(BaseModel):
-    user_id: str
-    messages: List[ChatMessage] = []
-    created_at: int = Field(default_factory=lambda: int(datetime.timestamp(datetime.now())))
-    updated_at: int = Field(default_factory=lambda: int(datetime.timestamp(datetime.now())))
+    userId: str
+    messages: List[Message] = []
+    code: Optional[Code] = None
+    createdAt: int = Field(default_factory=datetime.now)
+    
+    class Config:
+        orm_mode = True
