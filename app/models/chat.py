@@ -25,6 +25,3 @@ class Chat(BaseModel):
     messages: List[Message] = []
     code: Optional[Code] = None
     createdAt: int = Field(default_factory=datetime.now)
-    
-    class Config:
-        orm_mode = True

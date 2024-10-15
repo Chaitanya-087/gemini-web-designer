@@ -20,7 +20,7 @@ router = APIRouter(
 @router.post("/default", status_code=200)
 async def default_chat(message: str):
     aiResponse = await get_ai_response(message,generateUUID())
-    message = {"id": messageId,"user_message": message.model_dump(),"ai_response": aiResponse.model_dump()}
+    message = {"user_message": message.model_dump(),"Code": aiResponse.model_dump()}
     return message
     
 
