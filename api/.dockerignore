@@ -2,7 +2,7 @@
 venv/
 
 # Exclude environment variable files
-.env
+.env*
 
 # Exclude Git metadata
 .git/
