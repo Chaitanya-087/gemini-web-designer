@@ -1,0 +1,22 @@
+# Exclude virtual environment directory
+venv/
+
+# Exclude environment variable files
+.env*
+
+# Exclude Git metadata
+.git/
+
+# Exclude IDE/editor configurations
+.vscode/
+
+# Exclude build artifacts
+build/
+dist/
+*.egg-info/
+
+node_modules/
+
+# Exclude Docker-related files
+Dockerfile*
+.dockerignore
