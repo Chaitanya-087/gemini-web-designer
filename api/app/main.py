@@ -1,6 +1,7 @@
+""" Main file for the FastAPI application. """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import Hello, Chat
+from .routers import Hello
 
 app = FastAPI()
 
@@ -17,4 +18,3 @@ app.add_middleware(
 )
 
 app.include_router(Hello)
-app.include_router(Chat)

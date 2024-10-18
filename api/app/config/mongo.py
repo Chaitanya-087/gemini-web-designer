@@ -1,3 +1,4 @@
+"""This file is used to connect to the MongoDB database and export the chatsCollection object. """
 from pymongo import MongoClient
 
 client = MongoClient("mongodb://localhost:27017/")
@@ -6,4 +7,3 @@ chatsCollection = db["chats"]
 userCollection = db["users"]
 
 export = chatsCollection
-export = userCollection
