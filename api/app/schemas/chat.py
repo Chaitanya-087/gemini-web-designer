@@ -13,6 +13,7 @@ def basic_chat(chat: dict):
     return {
         "id": str(chat["_id"]),
         "name": chat["name"],
+        "created_at": chat["createdAt"],
     }
 
 def detailed_chat(chat: dict):
@@ -28,6 +29,8 @@ def detailed_chat(chat: dict):
         "id": str(chat["_id"]),
         "name": chat["name"],
         "messages": chat["messages"],
+        "created_at": chat["createdAt"],
+        "code": chat["code"],
     }
 
 def all_chats(chats: List[dict]):

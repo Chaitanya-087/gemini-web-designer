@@ -1,59 +1,48 @@
 """This module contains the routes for the chat API."""
-from bson import ObjectId
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-# from ..models.chat import Chat
+from ..services.chat import get_chats_by_user_id, create_chat_by_user_id,\
+                            get_chat_by_id, delete_chat_by_id
+from ..services.gemini import get_ai_response
 
-# from ..schemas.chat import individualChat, allChats
+from ..models.chat import Prompt
 
-# from ..config.mongo import chatsCollection
-
-# from ..services.gemini import getAIResponse
-# from ..services.chat import getChatsByUserId
+from ..schemas.chat import all_chats
 
 router = APIRouter(
     prefix="/chats",
     tags=["chats"],
 )
 
-# #create default chat
-# @router.post("/noauth", status_code=200)
-# async def default_chat(message: str):
-#     ai_response = await getAIResponse(message)
-#     message = {"user_message": message.model_dump(),"Code": ai_response.model_dump()}
-#     return message
+@router.get("/users/{user_id}/all", status_code=200, response_model=all_chats)
+async def get_all_chats(user_id: str):
+    """Get all chats by a specific user."""
+    return get_chats_by_user_id(user_id)
 
-# # Create a new chat
-# @router.post("/users/{userId}", status_code=201)
-# async def create_chat(userId: str):
-#     new_chat = Chat(user_id=userId)
-#     resp = chatsCollection.insert_one(new_chat.model_dump())
-#     return {"id": str(resp.inserted_id)}
+@router.get("/{chat_id}", status_code=200)
+async def get_chat(chat_id: str):
+    """Get a chat by chat ID."""
+    return get_chat_by_id(chat_id)
 
-# # Get a specific chat by chat ID
-# @router.get("/{chatId}", status_code=200)
-# async def get_chat(chatId: str):
-#     if not ObjectId.is_valid(chatId):
-#         raise HTTPException(status_code=400, detail="Invalid chat ID")
-#     resp = chatsCollection.find_one({"_id": ObjectId(chatId)})
-#     if resp is None:
-#         raise HTTPException(status_code=404, detail="Chat not found")
-#     return individualChat(resp)
+@router.post("/users/{user_id}", status_code=201)
+async def create_chat(user_id: str):
+    """Create a new chat for a specific user."""
+    return create_chat_by_user_id(user_id)
 
-# # Get all chats by a specific user
-# @router.get("/users/{userId}/all", status_code=200)
-# async def get_all_chats(userId: str):
-#     resp = getChatsByUserId(userId)
-#     return allChats(resp)
+@router.post("/default", status_code=200)
+async def default_chat(prompt: Prompt):
+    """Get a response from the Gemini model."""
+    response = await get_ai_response(prompt.input)
+    return response
 
 # #Post a message in a chat
 # @router.post("/{chatId}/messages", status_code=201)
 # async def send_message(chatId: str, message: Prompt):
 #     if not ObjectId.is_valid(chatId):
 #         raise HTTPException(status_code=400, detail="Invalid chat ID")
-    
 #     aiResponse = await get_ai_response(message,chatId)
-#     message = {"id": messageId,"user_message": message.model_dump(),"ai_response": aiResponse.model_dump()}
+#     message = {"id": messageId,"user_message": message.model_dump(),
+#                               "ai_response": aiResponse.model_dump()}
 #     result = chatsCollection.update_one(
 #         {"_id": ObjectId(chatId)},
 #         {
@@ -66,18 +55,7 @@ router = APIRouter(
 #         raise HTTPException(status_code=404, detail="Chat not found")
 #     return message
 
-# #delete a chat by chat ID
-# @router.delete("/{chatId}")
-# def deleteChat(chatId: str):
-#     if not ObjectId.is_valid(chatId):
-#         raise HTTPException(status_code=400, detail="Invalid chat ID")
-#     delete_result = chatsCollection.delete_one({"_id": ObjectId(chatId)})
-#     if delete_result.deleted_count == 0:
-#         raise HTTPException(status_code=404, detail="Chat not found")
-#     return {"message": "Chat deleted successfully"}
-
-# #Delete all chats for a specific user
-# @router.delete("/users/{userId}/all")
-# def deleteAllChats(userId: str):
-#     delete_result = chatsCollection.delete_many({"user_id": userId})
-#     return {"deleted_count": delete_result.deleted_count}
+@router.delete("/{chat_id}", status_code=200)
+async def delete_chat(chat_id: str):
+    """Delete a chat by chat ID."""
+    return delete_chat_by_id(chat_id)

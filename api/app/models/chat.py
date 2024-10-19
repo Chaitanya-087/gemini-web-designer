@@ -7,6 +7,17 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+class Prompt(BaseModel):
+    """Represents a prompt for the AI model to generate a response.
+
+    Args:
+        BaseModel: Pydantic's base class for data validation and settings management.
+
+    Attributes:
+        input (str): The input text for the AI model to generate a response.
+    """
+    input: str
+
 class MessageType(str, Enum):
     """Represents the type of message in a chat.
 
@@ -33,7 +44,7 @@ class Message(BaseModel):
         content (str): The actual content of the message.
     """
     id: str = Field(default_factory=lambda: uuid4().hex)
-    type: MessageType
+    type: MessageType = Field(default=MessageType.USER)
     content: str = Field(default="")
 
 class Code(BaseModel):
