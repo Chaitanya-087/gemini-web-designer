@@ -11,11 +11,10 @@ export default function SidebarChatList({ chats }) {
             </div>
             <ul className='flex-col gap-1'>
                 {chats.toReversed().map(chat => {
-                    let chatname = chat.messages.length > 0 ? chat.messages[0]["user_message"].text : "New Chat";
                     return (
-                        <Link to={`/c/${chat.id}`} className='p-2 flex cursor-pointer rounded-md hover:bg-indigo-50 text-gray-700' key={chat.id} title={chatname}>
+                        <Link to={`/c/${chat.id}`} className='p-2 flex cursor-pointer rounded-md hover:bg-indigo-50 text-gray-700' key={chat.id} title={chat.name}>
                             <li>
-                                <p className='text-sm font-semibold truncate'>{chatname}</p>
+                                <p className='text-sm font-semibold truncate'>{chat.name}</p>
                             </li>
                         </Link>
                     )
