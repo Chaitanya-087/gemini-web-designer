@@ -77,7 +77,7 @@ class Chat(BaseModel):
     userId: str
     messages: List[Message] = []
     name: str = Field(default="New Chat")
-    code: Optional[Code] = None
+    code: Code = Field(default_factory=Code)
     createdAt: datetime = Field(default_factory=datetime.now)
 
 class Response(Code):

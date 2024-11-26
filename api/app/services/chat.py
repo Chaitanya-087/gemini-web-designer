@@ -41,7 +41,7 @@ async def delete_chat_by_id(chat_id: str) -> dict:
         raise HTTPException(status_code=404, detail="Chat not found")
     return {"message": "Chat deleted successfully."}
 
-async def post_message_by_chat_id(prompt: Prompt, chat_id: str) -> Response:
+async def post_message_by_chat_id(prompt: Prompt, chat_id: str) -> dict:
     """
     Post a message in a chat by chat ID.
 
@@ -57,8 +57,8 @@ async def post_message_by_chat_id(prompt: Prompt, chat_id: str) -> Response:
 
     response = await get_ai_response(prompt.input)
     user_message = Message(content=prompt.input, type=MessageType.USER)
-    ai_message = Message(content=response.explanation, type=MessageType.AI)
-    code = Code(html=response.html, css=response.css, js=response.js)
+    ai_message = Message(content=response['explanation'], type=MessageType.AI)
+    code = Code(html=response['html'], css=response['css'], js=response['js'])
 
     chat = chatsCollection.find_one({"_id": ObjectId(chat_id)})
     if chat is None:
@@ -81,5 +81,11 @@ async def post_message_by_chat_id(prompt: Prompt, chat_id: str) -> Response:
 
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Chat not found")
-
-    return response
+    
+    message = Message(content=response['explanation'], type=MessageType.AI)
+    code = Code(html=response['html'], css=response['css'], js=response['js'])
+    
+    return {
+        "message": message.model_dump(),
+        "code": code.model_dump()
+    }

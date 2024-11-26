@@ -3,7 +3,35 @@
 @tailwind utilities;
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+}
+
+.gutter.gutter-horizontal {
+  background-image: none;
+  cursor: col-resize;
+  background-size: contain;
+  background-color: #e7e7e7;
+  width: 7px !important;
+  position: relative;
+}
+
+.gutter.gutter-horizontal::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  border-radius: 0.5rem;
+  height: 1.5rem;
+  background-color: gray;
+  transform: translate(-50%, -50%);
 }
