@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { useParams } from 'react-router-dom';
-import ChatForm from '../../components/chatForm/chatForm';
+import { Allotment } from "allotment";
+
 import { FaArrowDownLong } from "react-icons/fa6";
-import AiImage from "../../assets/image.png";
 import SyncLoader from "react-spinners/SyncLoader";
-import CodeEditor from '../../components/codeEditor/codeEditor';
-import Split from 'react-split'
-import "./split.css"
+
+import { ChatForm, CodeEditor } from '../../components';
+
+import AiImage from "../../assets/logo.png";
+import "allotment/dist/style.css";
+
 const DEFAULT = {
   id: '',
   content: '',
@@ -21,7 +25,7 @@ function Playground() {
   const [displayResponse, setDisplayResponse] = useState(DEFAULT);
   const [prompt, setPrompt] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [count, setCount] = useState(0); // Used to trigger useEffect
+  const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState({
     html: '',
@@ -72,6 +76,7 @@ function Playground() {
         ...prevChat,
         messages: [...prevChat.messages, userMessage],
       }));
+
       setIsLoading(true);
       try {
         const res = await fetch(`http://localhost:8080/chats/${chatId}/messages`, {
@@ -116,12 +121,14 @@ function Playground() {
   }, [chat.messages]);
 
   return (
-      <Split className='flex items-center w-full  h-screen'>
-
-        {!chatId ? (
+    <Allotment separator={true} className="flex items-center w-full h-screen">
+      {!chatId ? (
+        <Allotment.Pane>
           <Default />
-        ) : (
-          <div className="flex w-full flex-1 flex-col h-full pt-16 bg-white min-w-[40%]">
+        </Allotment.Pane>
+      ) : (
+        <Allotment.Pane minSize={500}>
+          <div className="flex w-full flex-1 flex-col h-full pt-16 bg-white">
             {/* Scrollable chat area */}
             <div ref={chatAreaRef} className="flex-1 relative overflow-y-auto scroll-smooth pt-4" onScroll={handleOnScroll}>
               <div className="text-gray-800 leading-relaxed flex flex-col flex-1 gap-2 max-w-[75%] pb-4 m-auto">
@@ -146,7 +153,6 @@ function Playground() {
                         <SyncLoader color="#000" size={8} margin={2} />
                       )}
                     </div>
-
                   </div>
                 ))}
               </div>
@@ -167,17 +173,18 @@ function Playground() {
               </div>
             </div>
           </div>
-        )}
-        <div className='min-w-[40%] max-w-[70%]'>
-          <CodeEditor code={code} setCode={setCode} />
-        </div>
-      </Split>
+        </Allotment.Pane>
+      )}
+      <Allotment.Pane minSize={500}>
+        <CodeEditor code={code} setCode={setCode} />
+      </Allotment.Pane>
+    </Allotment>
   );
 }
 
 function Default() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
+    <div className="w-full h-full flex flex-col items-center justify-center min-w-[40%]">
       <p className="text-gray-500 text-lg mb-6">Select a chat to start messaging</p>
       <ChatForm />
     </div>

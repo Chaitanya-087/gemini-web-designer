@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react"
+import React, { useState, createContext, useMemo } from "react"
 import SidebarChatList from "./SidebarChatList";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
@@ -11,6 +11,8 @@ export default function Sidebar() {
     const toggleExpanded = () => {
         setExpanded(prev => !prev);
     }
+
+    const contextValue = useMemo(() => ({ expanded }), [expanded]);
 
     return (
         <aside className={`relative z-50 transition-all duration-300 ${expanded ? 'w-[260px] min-w-[260px] max-w-[260px]' : 'w-0 min-w-0 max-w-0'}`}>
@@ -35,9 +37,8 @@ export default function Sidebar() {
                             <span className="text-nowrap overflow-hidden transition-all">Create New Chat</span>
                         </div>
                     </div>
-
-                    {/* chats list */}
-                    <SidebarContext.Provider value={{ expanded }}>
+                    <SidebarContext.Provider value={contextValue}>
+                        {/* chats list */}
                         <SidebarChatList />
                     </SidebarContext.Provider>
                 </div>
@@ -58,8 +59,8 @@ export default function Sidebar() {
                     </div>
                 </div>
             </div>
-            <button 
-                className="absolute -z-20 top-3 left-3 p-2 rounded-lg cursor-pointer border hover:bg-gray-100" 
+            <button
+                className="absolute -z-20 top-3 left-3 p-2 rounded-lg cursor-pointer border hover:bg-gray-100"
                 onClick={() => setExpanded(prev => !prev)}
                 aria-label="Expand Sidebar"
                 type="button"

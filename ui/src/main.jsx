@@ -1,11 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import {
-  createBrowserRouter,
-  RouterProvider
-} from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import App from './App.jsx'
-import Playground from './routes/playground/playground.jsx'
+import { Playground, Home } from "./routes";
+
 import './index.css'
 
 const router = createBrowserRouter([
@@ -15,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Playground />
+        element: <Home />
       },
       {
         path: 'c/:chatId',

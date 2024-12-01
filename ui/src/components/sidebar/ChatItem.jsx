@@ -7,14 +7,14 @@ import { SidebarContext } from "./Sidebar";
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 
-Chat.propTypes = {
+ChatItem.propTypes = {
     chat: PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
     }).isRequired,
 };
 
-export default function Chat({ chat }) {
+export default function ChatItem({ chat }) {
     const { chatId } = useParams();
     const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 

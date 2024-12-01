@@ -41,7 +41,7 @@ function CodeEditor({ code, setCode }) {
             width="100%"
             language={language}
             value={value || ''}
-            theme="vs-dark"
+            theme="light"
             onChange={onChange}
         />
     );
