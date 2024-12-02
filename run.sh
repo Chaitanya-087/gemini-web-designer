@@ -26,7 +26,7 @@ PROJECT_ROOT=$(pwd)
 API_DIR="$PROJECT_ROOT/api"
 UI_DIR="$PROJECT_ROOT/ui"
 
-if [[! -d ".venv" ]]; then
+if [[ ! -d ".venv" ]]; then
   log_info "Python virtual environment not found. Please run setup.sh first."
   exit 1
 fi
