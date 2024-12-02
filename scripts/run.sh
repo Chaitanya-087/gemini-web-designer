@@ -1,24 +1,21 @@
 #!/bin/bash
 
-# Function for logging with timestamp
+
 log_info() {
   echo "$(date +"%Y-%m-%d %H:%M:%S") - INFO - $1"
 }
 
-# Define the ports for API and UI
-API_PORT=8080  # Replace with your actual API port
-UI_PORT=5173   # Replace with your actual UI port
+API_PORT=8080  
+UI_PORT=5173
 
-# Kill any process using the API port
 if lsof -i:$API_PORT -t >/dev/null; then
-  echo "Killing process on port $API_PORT"
-  kill -9 $(lsof -i:$API_PORT -t)
+  echo "process on port $API_PORT is running"
+  exit 1
 fi
 
-# Kill any process using the UI port
 if lsof -i:$UI_PORT -t >/dev/null; then
-  echo "Killing process on port $UI_PORT"
-  kill -9 $(lsof -i:$UI_PORT -t)
+  echo "process on port $UI_PORT is running"
+  exit 1
 fi
 
 set -euo pipefail
@@ -29,7 +26,10 @@ PROJECT_ROOT=$(pwd)
 API_DIR="$PROJECT_ROOT/api"
 UI_DIR="$PROJECT_ROOT/ui"
 
-source "$PROJECT_ROOT/.venv/bin/activate"
+if [[! -d ".venv" ]]; then
+  log_info "Python virtual environment not found. Please run setup.sh first."
+  exit 1
+fi
 
 cd "$API_DIR"
 log_info "Starting Python API..."
