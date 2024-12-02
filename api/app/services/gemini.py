@@ -1,5 +1,6 @@
 """This module is used to interact with the Gemini model."""
 import json
+import os
 from dotenv import dotenv_values
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -12,7 +13,9 @@ from langchain_redis import RedisChatMessageHistory
 
 from ..models.chat import Response
 
-config = dotenv_values("/home/bitnap/Desktop/gemni-web-designer/api/.env.development.local")
+DIR = os.path.dirname(os.path.realpath(__file__))
+ENV_PATH = os.path.abspath(os.path.join(DIR, '..', '..', '.env.development.local'))
+config = dotenv_values(ENV_PATH)
 
 API_KEY = config.get("GEMINI_API_KEY")
 REDIS_URL = config.get("REDIS_URL")
@@ -93,12 +96,12 @@ async def get_ai_response(question: str, session_id: str = "default_id") -> Resp
 
 # python3 -m api.app.services.gemini
 # driver code
-if __name__ == "__main__":
-    import asyncio
+# if __name__ == "__main__":
+#     import asyncio
 
-    async def main():
-        """driver code"""
-        response = await get_ai_response("add footer to it", "test_session_id")
-        print(response['explanation'])
+#     async def main():
+#         """driver code"""
+#         response = await get_ai_response("add footer to it", "test_session_id")
+#         print(response['explanation'])
 
-    asyncio.run(main())
+#     asyncio.run(main())
